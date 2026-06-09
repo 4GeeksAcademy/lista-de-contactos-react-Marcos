@@ -1,13 +1,11 @@
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
 import ContactCard from "../components/ContactCard";
 import useGlobalReducer from "../hooks/useGlobalReducer";
-export const Home = () => {
 
+export const Home = () => {
 	const { store, dispatch } = useGlobalReducer();
 
 	const getContacts = async () => {
-
 		const response = await fetch(
 			"https://playground.4geeks.com/contact/agendas/marcos/contacts"
 		);
@@ -16,7 +14,7 @@ export const Home = () => {
 
 		dispatch({
 			type: "set_contacts",
-			payload: data.contacts || []
+			payload: data.contacts
 		});
 	};
 
@@ -25,32 +23,21 @@ export const Home = () => {
 	}, []);
 
 	return (
+		<div className="container mt-4">
 
-		<div className="container mt-5">
-
-			<div className="text-end mb-4">
-
-				<Link
-					to="/add-contact"
-					className="btn btn-success"
-				>
-					Add new contact
-				</Link>
-
-			</div>
-
-			{
+			{store.contacts.length === 0 ? (
+				<h2 className="text-center">
+					No contacts found
+				</h2>
+			) : (
 				store.contacts.map(contact => (
-
 					<ContactCard
 						key={contact.id}
 						contact={contact}
 					/>
-
 				))
-			}
+			)}
 
 		</div>
-
 	);
 };
